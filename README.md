@@ -4,7 +4,7 @@
 
 ## Purpose & features
 
-* Deploy and monitor MySQL and MongoDB databases on docker
+* Deploy and monitor MySQL and MongoDB databases on [Docker](http://www.docker.io)
 * Command line tool
 * Web UI
 * Pluggable database type (write your own adapter)
