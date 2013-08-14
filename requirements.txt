@@ -1,2 +1,4 @@
+termcolor
 Flask-Script
 docker-py
+mysql-connector-repackaged
