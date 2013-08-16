@@ -1,0 +1,12 @@
+{
+  "name": "bootstrap-glyphicons",
+  "homepage": "https://github.com/twbs/bootstrap-glyphicons",
+  "_release": "77998d3756",
+  "_resolution": {
+    "type": "branch",
+    "branch": "gh-pages",
+    "commit": "77998d3756b1c46e78ffa785bd2b5c7a5f8150d0"
+  },
+  "_source": "git://github.com/twbs/bootstrap-glyphicons.git",
+  "_target": "gh-pages"
+}
