@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form class="form-horizontal" method="POST" action="/add/{{dbtype}}">
+  <div class="form-group">
+    <label for="inputName" class="col-lg-2 control-label">Name</label>
+    <div class="col-lg-5">
+      <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputMemoryLimit" class="col-lg-2 control-label">Memory Limit</label>
+    <div class="col-lg-5">
+      <div class="input-group">
+        <input type="text" class="form-control" id="inputMemoryLimit" placeholder="Memory Limit" name="memory_limit" value="256">
+        <span class="input-group-addon">Mo</span>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="port_forwarding"> Port forwarding
+        </label>
+      </div>
+      <button type="submit" class="btn btn-default">Create</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

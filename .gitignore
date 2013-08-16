@@ -1,4 +1,6 @@
+.DS_Store
 pyenv
+npm-debug.log
 
 *.py[cod]
 

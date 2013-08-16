@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row">
+  <a role="button" href="{{ url_for('add', dbtype='mysql') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus">​</span>​ Create a MySQL server</a>
+  <a role="button" href="{{ url_for('add', dbtype='mongo') }}" class="btn btn-success"><span class="glyphicon glyphicon-leaf">​</span>​ Create a MongoDB server</a>
+</div>
+<div class="row">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><!-- Select --></th>
+        <th>#</th>
+        <th>IP</th>
+        <th>Database port</th>
+        <th>Pulse</th>
+        <th>Running</th>
+        <th>Status</th>
+        <th><!-- Actions --></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in containers  %}
+        <tr>
+          <td><input type="checkbox" id="{{c.id}}" 
+            {% if c.get('running', False) %}class="checkbox-server-up">{% endif %}
+          </td>
+          <td>{{c.get('id', '')}}</td>
+          <td>{{c.get('ip', '')}}</td>
+          <td>{{c.get('db_port', '')}}</td>
+          <td id="pulse-{{c.id}}">
+            {% if c.get('running', False) %}
+              <span class="label label-warning">Checking...</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if c.get('running', False) %}
+              <span class="label label-success">Running</span>
+            {% else %}
+              <span class="label label-danger">Not running</span>
+            {% endif %}
+          </td>
+          <td>{{c.get('status', '')}}</td>
+          <td>
+            {% if c.get('running', False) %}
+              <a href="/stop/{{c.id}}" onclick="return RUsure();" title="Stop container">
+                <i class="glyphicon glyphicon-stop">​</i>​
+              </a>
+            {% else %}
+              <a href="/start/{{c.id}}" title="Start container">
+                <i class="glyphicon glyphicon-play">​</i>​
+              </a>
+              <a href="/remove/{{c.id}}" onclick="return RUsure();" title="Remove container">
+                <i class="glyphicon glyphicon-trash">​</i>​
+              </a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
