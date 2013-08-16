@@ -42,14 +42,14 @@
           <td>{{c.get('status', '')}}</td>
           <td>
             {% if c.get('running', False) %}
-              <a href="/stop/{{c.id}}" onclick="return RUsure();" title="Stop container">
+              <a href="/stop/{{c.id}}" onclick="return areyousure();" title="Stop container">
                 <i class="glyphicon glyphicon-stop">​</i>​
               </a>
             {% else %}
               <a href="/start/{{c.id}}" title="Start container">
                 <i class="glyphicon glyphicon-play">​</i>​
               </a>
-              <a href="/remove/{{c.id}}" onclick="return RUsure();" title="Remove container">
+              <a href="/remove/{{c.id}}" onclick="return areyousure();" title="Remove container">
                 <i class="glyphicon glyphicon-trash">​</i>​
               </a>
             {% endif %}
