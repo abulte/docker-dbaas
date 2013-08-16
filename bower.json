@@ -1,0 +1,16 @@
+{
+  "name": "docker-dbaas",
+  "version": "1.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "git://github.com/twbs/bootstrap.git#~3.0.0-rc1",
+    "bootstrap-glyphicons": "gh-pages"
+  },
+  "private": true
+}
