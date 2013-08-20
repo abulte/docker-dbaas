@@ -1,8 +1,16 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="row">
-  <a role="button" href="{{ url_for('add', dbtype='mysql') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus">​</span>​ Create a MySQL server</a>
-  <a role="button" href="{{ url_for('add', dbtype='mongo') }}" class="btn btn-success"><span class="glyphicon glyphicon-leaf">​</span>​ Create a MongoDB server</a>
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      <span class="glyphicon glyphicon-plus">​</span>​ Create a database server <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      {% for p in plugins %}
+      <li><a href="{{url_for('add', dbtype=p)}}">Create a <strong>{{p|capitalize}}</strong> server</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 <div class="row">
   <table class="table table-hover">
@@ -10,6 +18,8 @@
       <tr>
         <th><!-- Select --></th>
         <th>#</th>
+        <th>Type</th>
+        <th>Name</th>
         <th>IP</th>
         <th>Database port</th>
         <th>Pulse</th>
@@ -25,6 +35,8 @@
             {% if c.get('running', False) %}class="checkbox-server-up">{% endif %}
           </td>
           <td>{{c.get('id', '')}}</td>
+          <td>{{c.get('type', '')}}</td>
+          <td>{{c.get('name', '')}}</td>
           <td>{{c.get('ip', '')}}</td>
           <td>{{c.get('db_port', '')}}</td>
           <td id="pulse-{{c.id}}">

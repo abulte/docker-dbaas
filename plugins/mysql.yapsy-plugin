@@ -1,0 +1,9 @@
+[Core]
+Name = mysql
+Module = mysql
+
+[Documentation]
+Author = Alexandre Bulté
+Version = 0.1
+Website = https://github.com/abulte/docker-dbaas
+Description = MySQL support for Docker Databases As A Service

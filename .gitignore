@@ -1,3 +1,4 @@
+*.db
 .DS_Store
 pyenv
 npm-debug.log
