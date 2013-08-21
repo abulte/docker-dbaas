@@ -9,6 +9,8 @@
 * Web UI
 * Pluggable database type (write your own adapter)
 
+![Screenshot](./static/img/screenshot.png "List of servers")
+
 ## Install
 
 TODO
