@@ -17,16 +17,14 @@ class MysqlPlugin(BaseDatabasePlugin, IPlugin):
     STARTUP_CMD = '/usr/sbin/mysqld'
     USER_LOGIN = 'root'
     USER_PASSWD = 'root4mysql'
+    PORT = 3306
 
     def test_container(self, info):
         ip = info.get('ip', '127.0.0.1')
-        try:
-            import mysql.connector
-            cnx = mysql.connector.connect(user=self.USER_LOGIN, 
-                                        password=self.USER_PASSWD,
-                                        host=ip, # database='users'
-                                    )
-            cnx.close()
-            return True, None
-        except Exception, e:
-            return False, e
+        import mysql.connector
+        cnx = mysql.connector.connect(user=self.USER_LOGIN, 
+                                    password=self.USER_PASSWD,
+                                    host=ip, # database='users'
+                                )
+        cnx.close()
+        return True

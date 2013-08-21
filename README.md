@@ -1,6 +1,6 @@
 # Docker Databases As A Service
 
-## /!\ Work In Progress
+### Current stage: Alpha
 
 ## Purpose & features
 

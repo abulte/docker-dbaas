@@ -76,9 +76,6 @@ def start(c_id):
 @app.route('/remove/<c_id>')
 def remove(c_id):
     docker.remove_container(c_id)
-    get_db().execute('delete from databases where docker_id = ?', 
-        [c_id])
-    get_db().commit()
     flash('Server successfully removed.', 'success')
     return redirect(url_for('index'))
 
@@ -99,10 +96,11 @@ def add(dbtype):
 
 @app.route('/pulse/<c_id>')
 def pulse(c_id):
-    cdb = query_db('select * from databases where docker_id = ?', args=[c_id], one=True)
-    if cdb is None:
-        raise Exception('No container by id %s' % c_id)
-    status = docker.test_container(c_id, cdb['type'], quiet=True)
+    try:
+        status = docker.test_container(c_id)
+    except Exception, e:
+        status = False
+        app.logger.error('Error in pulse for %s: %s' % (c_id, e))
     return jsonify({'up': status})
 
 if __name__ == '__main__':

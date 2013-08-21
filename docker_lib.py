@@ -8,7 +8,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from docker import Client
-from termcolor import colored
 from yapsy.PluginManager import PluginManager
 from webapp import app, query_db, get_db
 
@@ -36,14 +35,10 @@ def _getAdapter(ttype):
 def dc():
     return Client(base_url=app.config.get('BASE_URL'), version='1.3')
 
-def ok():
-    return colored('[OK]', 'green')
-
-def ko():
-    return colored('[KO]', 'red')
-
 def _format_container(raw):
     # app.logger.debug(raw)
+    adapter = _getAdapter(raw['type'])
+    port = adapter.PORT
     running = raw['State']['Running']
     c_id = raw['ID'][:12]
     if not running:
@@ -53,9 +48,15 @@ def _format_container(raw):
             'id': c_id,
             'running': True,
             'ip': raw['NetworkSettings']['IPAddress'],
-            'db_port': raw['NetworkSettings']['PortMapping']['Tcp'].get('3306', None),
+            'db_port': raw['NetworkSettings']['PortMapping']['Tcp'].get('%s' % port, None),
             'created': raw['Created']
         }
+
+def _get_container_from_db(c_id):
+    cdb = query_db('select * from databases where docker_id = ?', args=[c_id], one=True)
+    if cdb is None:
+        raise Exception('No container by id %s' % c_id)
+    return cdb
 
 def stop_container(c_id):
     dc().stop(c_id)
@@ -66,11 +67,16 @@ def start_container(c_id):
     return True
 
 def remove_container(c_id):
+    with app.app_context():
+        get_db().execute('delete from databases where docker_id = ?', [c_id])
+        get_db().commit()
     dc().remove_container(c_id)
     return True
 
 def inspect_container(container_id):
     raw = dc().inspect_container(container_id)
+    cdb = _get_container_from_db(container_id)
+    raw['type'] = cdb['type']
     return _format_container(raw)
 
 def get_containers(details=False):
@@ -92,7 +98,7 @@ def get_containers(details=False):
             detail_containers.append(details)
     return detail_containers
 
-def create_container(dbtype, name, mem_limit, pm, quiet=True):
+def create_container(dbtype, name, mem_limit, pm):
     adapter = _getAdapter(dbtype)
     container = adapter.create_container(mem_limit=int(mem_limit)*1024*1024)
     with app.app_context():
@@ -102,22 +108,13 @@ def create_container(dbtype, name, mem_limit, pm, quiet=True):
     start_container(container['Id'])
     return container
 
-def test_container(c_id, ttype, quiet=True):
-    adapter = _getAdapter(ttype)
+def test_container(c_id):
+    with app.app_context():
+        cdb = _get_container_from_db(c_id)
+    adapter = _getAdapter(cdb['type'])
     info = inspect_container(c_id)
-    if not quiet and (not info or not info['running']): 
-        return 1
-    elif not info:
+    if not info:
         raise Exception('No container by id')
     elif not info['running']:
         return False
-    (status, result) = adapter.test_container(info)
-    if quiet:
-        if result is not None:
-            app.logger.error(result)
-        return status
-    else:
-        if status:
-            print '%s Connection successful' % ok()
-        else:
-            print '%s %s' % (ko(), result)
+    return adapter.test_container(info)
