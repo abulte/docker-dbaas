@@ -87,7 +87,7 @@ def list(type='all'):
         else:
             color = 'red'
         cid = colored(c['id'], color)
-        print '%-12s %-10s %-30s %-15s %-7s %s' % (cid, c['type'], c['name'], c.get('ip', ''), c.get('db_port', ''), c['running'])
+        print '%-12s %-10s %-30.30s %-15s %-7s %s' % (cid, c['type'], c['name'], c.get('ip', ''), c.get('db_port', ''), c['running'])
 
 @manager.command
 def inspect(container_id):
