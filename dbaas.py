@@ -76,18 +76,18 @@ def create(dbtype, name, nopm=False, memorylimit=256):
         return test(container['Id'])
     except Exception, e:
        print '%s %s' % (ko(), e)
- 
+
 @manager.command
 def list(type='all'):
     cs = docker.get_containers(details=True)
-    print '%s\t\t%s\t%s\t\t%s\t\t%s\t%s' % ('Id', 'Type', 'Name', 'IP', 'DB port', 'Running')
+    print '%-12s %-10s %-30s %-15s %-7s %s' % ('Id', 'Type', 'Name', 'IP', 'DB port', 'Running')
     for c in cs:
         if c['running']:
             color = 'green'
         else:
             color = 'red'
         cid = colored(c['id'], color)
-        print '%s\t%s\t%s\t%s\t%s\t%s' % (cid, c['type'], c['name'], c.get('ip', ''), c.get('db_port', ''), c['running'])
+        print '%-12s %-10s %-30s %-15s %-7s %s' % (cid, c['type'], c['name'], c.get('ip', ''), c.get('db_port', ''), c['running'])
 
 @manager.command
 def inspect(container_id):
