@@ -27,7 +27,6 @@ TODO
 
 ## TODO
 
-* Status
 * See about the circular imports ugly mess (Flask Plugin/Extension?)
 * Split optionnal and mandatory requirements (+ tests at import)
 * Implement "port mapping?" option

@@ -21,7 +21,10 @@ class MysqlPlugin(BaseDatabasePlugin, IPlugin):
 
     def test_container(self, info):
         ip = info.get('ip', '127.0.0.1')
-        import mysql.connector
+        try:
+            import mysql.connector
+        except ImportError:
+            raise Exception('Please install \'mysql-connector-repackaged\' package')
         cnx = mysql.connector.connect(user=self.USER_LOGIN, 
                                     password=self.USER_PASSWD,
                                     host=ip, # database='users'

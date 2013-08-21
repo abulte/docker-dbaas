@@ -9,7 +9,6 @@
 
 import os
 import sqlite3
-import psutil
 import docker_lib as docker
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, jsonify, g
@@ -52,11 +51,15 @@ def query_db(query, args=(), one=False):
 
 @app.route('/')
 def index():
+    try :
+        import psutil
+        mem_total = psutil.virtual_memory().total / 1024 / 1024
+        mem_available = psutil.virtual_memory().available / 1024 / 1024
+        mem_percent = psutil.virtual_memory().percent
+        load = ', '.join([str(l) for l in os.getloadavg()])
+    except ImportError:
+        mem_total = mem_available = mem_percent = load = 'NA'
     plugins = docker.getPluginNames()
-    mem_total = psutil.virtual_memory().total / 1024 / 1024
-    mem_available = psutil.virtual_memory().available / 1024 / 1024
-    mem_percent = psutil.virtual_memory().percent
-    load = ', '.join([str(l) for l in os.getloadavg()])
     containers = docker.get_containers(details=True)
     return render_template('index.html', containers=containers, mem_total=mem_total, 
         mem_available=mem_available, mem_percent=mem_percent, load=load, plugins=plugins)
