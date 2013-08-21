@@ -18,7 +18,8 @@ class BaseDatabasePlugin:
     def test_container(self, info):
         raise NotImplementedError
 
-    def create_container(self, mem_limit=None):
+    def create_container(self, mem_limit=None, pm=True):
+        # TODO pm : need a new docker image without EXPOSE
         if mem_limit is None: mem_limit = self.DEFAULT_MEMORY_LIMIT
         if len(docker.dc().images(self.DOCKER_IMAGE_NAME)) == 0:
             docker.dc().pull(self.DOCKER_IMAGE_NAME)

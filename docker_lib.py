@@ -105,7 +105,7 @@ def get_containers(details=False):
 
 def create_container(dbtype, name, mem_limit, pm):
     adapter = _getAdapter(dbtype)
-    container = adapter.create_container(mem_limit=int(mem_limit)*1024*1024)
+    container = adapter.create_container(mem_limit=int(mem_limit)*1024*1024, pm=pm)
     with app.app_context():
         get_db().execute('insert into databases (docker_id, name, memory_limit, port_mapping, type) \
             values (?, ?, ?, ?, ?)', [container['Id'], name, mem_limit, pm, dbtype])
