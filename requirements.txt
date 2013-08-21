@@ -4,3 +4,4 @@ docker-py
 mysql-connector-repackaged
 psutil
 yapsy
+python-dateutil

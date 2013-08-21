@@ -7,6 +7,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import datetime
+import dateutil.parser
 from docker import Client
 from yapsy.PluginManager import PluginManager
 from webapp import app, query_db, get_db
@@ -44,12 +46,17 @@ def _format_container(raw):
     if not running:
         return {'id': c_id, 'running': False}
     else:
+        start = raw['State']['StartedAt']
+        start = dateutil.parser.parse(start)
+        up_for = datetime.datetime.now(start.tzinfo) - start
+        status = 'Up %s day(s) %s hour(s)' % (up_for.days, up_for.seconds / 3600)
         return {
             'id': c_id,
             'running': True,
             'ip': raw['NetworkSettings']['IPAddress'],
             'db_port': raw['NetworkSettings']['PortMapping']['Tcp'].get('%s' % port, None),
-            'created': raw['Created']
+            'created': raw['Created'],
+            'status': status
         }
 
 def _get_container_from_db(c_id):
@@ -93,8 +100,6 @@ def get_containers(details=False):
             details = inspect_container(c['id'])
             details['name'] = c['name']
             details['type'] = c['type']
-            details['status'] = 'TODO'
-            # details['status'] = c['Status']
             detail_containers.append(details)
     return detail_containers
 

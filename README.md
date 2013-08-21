@@ -25,7 +25,7 @@ TODO
 
 ## TODO
 
-* Catch exception in command line client to print result
+* Status
 * See about the circular imports ugly mess (Flask Plugin/Extension?)
 * Split optionnal and mandatory requirements (+ tests at import)
 * Implement "port mapping?" option
