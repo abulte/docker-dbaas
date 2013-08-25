@@ -7,21 +7,29 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from flask.ext.script import Manager
+from flask.ext.script import Manager, Server
 from contextlib import closing
 import docker_lib as docker
 
-from webapp import app, connect_db
+from webapp import app, db
 
 manager = Manager(app)
+
+# Turn on debugger by default and reloader
+manager.add_command("runserver", Server(
+    use_debugger=True,
+    use_reloader=True,
+    host='0.0.0.0',
+    port=5000)
+)
 
 @manager.command
 def init_db():
     print 'Starting...'
-    with closing(connect_db()) as db:
+    with closing(db.connect()) as mydb:
         with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+            mydb.cursor().executescript(f.read())
+        mydb.commit()
     print 'Done.'
 
 if __name__ == "__main__":

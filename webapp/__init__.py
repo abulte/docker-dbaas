@@ -8,8 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import os
-import sqlite3
-import docker_lib as docker
+# import docker_lib as docker
+from flask_docker.flask_docker import Docker, SQLite3
 from flask import Flask, render_template, request, redirect, \
     url_for, flash, jsonify, g
 
@@ -20,32 +20,14 @@ app.debug = True
 app.config.update(
     SECRET_KEY = 'sLdNV5V33lFAaDKzswFVt6NG2ciz1OrJ5IfAwgyr',
     MEM_LIMIT = 256*1024*1024,
-    BASE_URL = 'http://172.17.42.1:4243',
-    DATABASE = 'dbaas.db'
+    DOCKER_BASE_URL = 'http://172.17.42.1:4243',
+    SQLITE3_DATABASE = 'dbaas.db'
 )
 
-## DATABASE
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = connect_db()
-        db.row_factory = sqlite3.Row
-    return db
+docker_ext = Docker(app)
+docker_ext.test_extension()
 
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
+db = SQLite3(app)
 
 ## VIEWS
 
@@ -105,6 +87,3 @@ def pulse(c_id):
         status = False
         app.logger.error('Error in pulse for %s: %s' % (c_id, e))
     return jsonify({'up': status})
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')

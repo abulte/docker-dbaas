@@ -9,15 +9,16 @@
 
 import time
 from docker import Client
-import docker_lib as docker
+# import docker_lib as docker
 from flask.ext.script import Manager, prompt_bool
 from termcolor import colored
 
 from webapp import app
+from webapp import docker_ext as docker
 
 manager = Manager(app)
 
-c = Client(base_url=app.config.get('BASE_URL'), version='1.3')
+c = Client(base_url=app.config.get('DOCKER_BASE_URL'), version='1.3')
 
 def ok():
     return colored('[OK]', 'green')

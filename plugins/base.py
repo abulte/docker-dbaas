@@ -7,7 +7,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import docker_lib as docker
+# import docker_lib as docker
+# import webapp
+from flask_docker.flask_docker import Docker
+from webapp import app
+
+docker = Docker(app)
 
 class BaseDatabasePlugin:
 

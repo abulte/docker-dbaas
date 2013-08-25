@@ -11,10 +11,14 @@ import datetime
 import dateutil.parser
 from docker import Client
 from yapsy.PluginManager import PluginManager
-from webapp import app, query_db, get_db
+from webapp import app, db
+# , query_db, get_db
 
 # import logging 
 # logging.basicConfig(level=logging.DEBUG)
+
+def get_db():
+    return db.connection.cursor()
 
 ## PLUGINS
 # Load the plugins from the plugin directory.
@@ -35,7 +39,7 @@ def _getAdapter(ttype):
 ## END PLUGINS
 
 def dc():
-    return Client(base_url=app.config.get('BASE_URL'), version='1.3')
+    return Client(base_url=app.config.get('DOCKER_BASE_URL'), version='1.3')
 
 def _format_container(raw):
     # app.logger.debug(raw)
@@ -60,7 +64,7 @@ def _format_container(raw):
         }
 
 def _get_container_from_db(c_id):
-    cdb = query_db('select * from databases where docker_id = ?', args=[c_id], one=True)
+    cdb = db.query_db('select * from databases where docker_id = ?', args=[c_id], one=True)
     if cdb is None:
         raise Exception('No container by id %s' % c_id)
     return cdb
@@ -89,7 +93,7 @@ def inspect_container(container_id):
 def get_containers(details=False):
     cs = []
     with app.app_context():
-        for c in query_db('select * from databases'):
+        for c in db.query_db('select * from databases'):
             cs.append({'id': c['docker_id'], 'name': c['name'], 'type': c['type']})
     if not details:
         return cs
