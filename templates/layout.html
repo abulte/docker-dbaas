@@ -4,8 +4,7 @@
     <title>Docker Databases As A Service</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="{{ url_for('static', filename='components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename='components/bootstrap-glyphicons/css/bootstrap-glyphicons.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='components/bootstrap-css/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet" media="screen">
   </head>
   <body>
@@ -26,7 +25,7 @@
       </ul>
       {% endif %}
     </div>
-    
+
     <div class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -45,7 +44,7 @@
       &copy; <a href="http://www.bulte.net">bulté.net</a> 2013
     </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='components/jquery/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='components/bootstrap-css/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
   </body>
 </html>

@@ -4,7 +4,7 @@
 
 ## Purpose & features
 
-* Deploy and monitor MySQL and MongoDB databases on [Docker](http://www.docker.io)
+* Deploy and monitor MySQL and MongoDB (soon) databases on [Docker](http://www.docker.io)
 * Command line tool
 * Web UI
 * Pluggable database type (write your own adapter)
@@ -13,7 +13,21 @@
 
 ## Install
 
-TODO
+	$ git clone https://github.com/abulte/docker-dbaas.git
+	$ cd docker-dbaas
+
+	# create virtual env
+	$ virtualenv pyenv
+	$ . pyenv/bin/activate
+
+	# install requirements
+	$ pip install -r requirements.txt -r requirements-opt.txt
+
+	# run web server
+	$ python webapp.py
+
+	# or use command line
+	$ python dbaas.py <command>
 
 ## Use
 
@@ -27,6 +41,7 @@ TODO
 
 ## TODO
 
+* MongoDB support
 * Implement "port mapping?" option
 * See about the circular imports ugly mess (Flask Plugin/Extension?)
 * Automatic tests

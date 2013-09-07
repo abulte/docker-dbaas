@@ -9,8 +9,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "git://github.com/twbs/bootstrap.git#~3.0.0-rc1",
-    "bootstrap-glyphicons": "gh-pages"
+    "bootstrap-css": "master",
+    "jquery": "~2.0.3"
   },
   "private": true
 }
