@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright 2013 Alexandre Bulté <alexandre[at]bulte[dot]net>
-# 
+#
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -12,8 +12,9 @@ import dateutil.parser
 from docker import Client
 from yapsy.PluginManager import PluginManager
 from webapp import app, query_db, get_db
+from requests.exceptions import HTTPError
 
-# import logging 
+# import logging
 # logging.basicConfig(level=logging.DEBUG)
 
 ## PLUGINS
@@ -77,7 +78,10 @@ def remove_container(c_id):
     with app.app_context():
         get_db().execute('delete from databases where docker_id = ?', [c_id])
         get_db().commit()
-    dc().remove_container(c_id)
+    try:
+        dc().remove_container(c_id)
+    except RuntimeError:
+        pass
     return True
 
 def inspect_container(container_id):
@@ -97,7 +101,13 @@ def get_containers(details=False):
         detail_containers = []
         for c in cs:
             # app.logger.debug(c)
-            details = inspect_container(c['id'])
+            try:
+                details = inspect_container(c['id'])
+            except HTTPError:
+                details = {}
+                details['id'] = c['id']
+                c['name'] = 'Not found'
+                c['type'] = ''
             details['name'] = c['name']
             details['type'] = c['type']
             detail_containers.append(details)
